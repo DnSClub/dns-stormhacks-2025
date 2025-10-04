@@ -9,17 +9,21 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+interface NavItem {
+    name: string;
+    link: string;
+    icon?: JSX.Element;
+}
+
+interface FloatingNavProps {
+    navItems: NavItem[];
+    className?: string;
+}
+
 export const FloatingNav = ({
     navItems,
     className,
-}: {
-    navItems: {
-        name: string;
-        link: string;
-        icon?: JSX.Element;
-    }[];
-    className?: string;
-}) => {
+}: FloatingNavProps) => {
     const { scrollYProgress } = useScroll();
 
     // set true for the initial state so that nav bar is visible in the hero section
@@ -28,7 +32,7 @@ export const FloatingNav = ({
     useMotionValueEvent(scrollYProgress, "change", (current) => {
         // Check if current is not undefined and is a number
         if (typeof current === "number") {
-            let direction = current! - scrollYProgress.getPrevious()!;
+            const direction = current - (scrollYProgress.getPrevious() ?? 0);
 
             if (scrollYProgress.get() < 0.05) {
                 // also set true for the initial state
@@ -71,7 +75,7 @@ export const FloatingNav = ({
                     border: "1px solid rgba(255, 255, 255, 0.125)",
                 }}
             >
-                {navItems.map((navItem: any, idx: number) => (
+                {navItems.map((navItem: NavItem, idx: number) => (
                     <Link
                         key={`link=${idx}`}
                         href={navItem.link}
