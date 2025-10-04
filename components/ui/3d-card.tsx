@@ -95,7 +95,7 @@ export const CardBody = ({
     );
 };
 
-interface CardItemProps extends React.HTMLAttributes<HTMLElement> {
+interface CardItemProps {
     as?: React.ElementType;
     children: React.ReactNode;
     className?: string;
@@ -119,7 +119,7 @@ export const CardItem = ({
     rotateZ = 0,
     ...rest
 }: CardItemProps) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLElement>(null);
     const [isMouseEntered] = useMouseEnter();
 
     useEffect(() => {
