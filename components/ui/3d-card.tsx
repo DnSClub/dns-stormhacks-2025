@@ -8,8 +8,6 @@ import React, {
     useContext,
     useRef,
     useEffect,
-    forwardRef,
-    ElementType,
 } from "react";
 
 const MouseEnterContext = createContext<
@@ -98,7 +96,7 @@ export const CardBody = ({
 };
 
 interface CardItemProps {
-    as?: ElementType;
+    as?: keyof JSX.IntrinsicElements;
     children: React.ReactNode;
     className?: string;
     translateX?: number | string;
@@ -108,26 +106,6 @@ interface CardItemProps {
     rotateY?: number | string;
     rotateZ?: number | string;
 }
-
-// Create a forwardRef component to handle the dynamic element
-const DynamicElement = forwardRef<HTMLElement, {
-    as: ElementType;
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: unknown;
-}>(({ as: Tag, children, className, ...rest }, ref) => {
-    return (
-        <Tag
-            ref={ref}
-            className={className}
-            {...rest}
-        >
-            {children}
-        </Tag>
-    );
-});
-
-DynamicElement.displayName = "DynamicElement";
 
 export const CardItem = ({
     as: Tag = "div",
@@ -157,16 +135,24 @@ export const CardItem = ({
         }
     };
 
-    return (
-        <DynamicElement
-            as={Tag}
-            ref={ref}
-            className={cn("w-fit transition duration-200 ease-linear", className)}
-            {...rest}
-        >
-            {children}
-        </DynamicElement>
-    );
+    // Create the element with proper typing
+    const elementProps = {
+        ref: ref as React.Ref<HTMLElement>,
+        className: cn("w-fit transition duration-200 ease-linear", className),
+        ...rest,
+    };
+
+    // Use a switch or if-else to handle different element types
+    if (Tag === "p") {
+        return <p {...elementProps}>{children}</p>;
+    } else if (Tag === "button") {
+        return <button {...elementProps}>{children}</button>;
+    } else if (Tag === "span") {
+        return <span {...elementProps}>{children}</span>;
+    } else {
+        // Default to div
+        return <div {...elementProps}>{children}</div>;
+    }
 };
 
 // Create a hook to use the context
