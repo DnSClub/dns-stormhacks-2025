@@ -122,47 +122,85 @@ export const CardItem = ({
     rotateZ = 0,
     ...rest
 }: CardItemProps) => {
-    const ref = useRef<HTMLElement>(null);
     const [isMouseEntered] = useMouseEnter();
+
+    // Create separate refs for each element type
+    const divRef = useRef<HTMLDivElement>(null);
+    const pRef = useRef<HTMLParagraphElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const spanRef = useRef<HTMLSpanElement>(null);
+    const h1Ref = useRef<HTMLHeadingElement>(null);
+    const h2Ref = useRef<HTMLHeadingElement>(null);
+    const h3Ref = useRef<HTMLHeadingElement>(null);
+    const aRef = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
         handleAnimations();
     }, [isMouseEntered]);
 
     const handleAnimations = () => {
-        if (!ref.current) return;
+        let currentRef: HTMLElement | null = null;
+        
+        // Determine which ref to use based on the Tag
+        switch (Tag) {
+            case "p":
+                currentRef = pRef.current;
+                break;
+            case "button":
+                currentRef = buttonRef.current;
+                break;
+            case "span":
+                currentRef = spanRef.current;
+                break;
+            case "h1":
+                currentRef = h1Ref.current;
+                break;
+            case "h2":
+                currentRef = h2Ref.current;
+                break;
+            case "h3":
+                currentRef = h3Ref.current;
+                break;
+            case "a":
+                currentRef = aRef.current;
+                break;
+            default:
+                currentRef = divRef.current;
+                break;
+        }
+
+        if (!currentRef) return;
+        
         if (isMouseEntered) {
-            ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+            currentRef.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
         } else {
-            ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+            currentRef.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
         }
     };
 
-    // Create the element with proper typing
-    const elementProps = {
-        ref: ref as React.Ref<HTMLElement>,
+    const commonProps = {
         className: cn("w-fit transition duration-200 ease-linear", className),
         ...rest,
     };
 
-    // Use a switch to handle different element types
+    // Use a switch to handle different element types with proper refs
     switch (Tag) {
         case "p":
-            return <p {...elementProps}>{children}</p>;
+            return <p ref={pRef} {...commonProps}>{children}</p>;
         case "button":
-            return <button {...elementProps}>{children}</button>;
+            return <button ref={buttonRef} {...commonProps}>{children}</button>;
         case "span":
-            return <span {...elementProps}>{children}</span>;
+            return <span ref={spanRef} {...commonProps}>{children}</span>;
         case "h1":
-            return <h1 {...elementProps}>{children}</h1>;
+            return <h1 ref={h1Ref} {...commonProps}>{children}</h1>;
         case "h2":
-            return <h2 {...elementProps}>{children}</h2>;
+            return <h2 ref={h2Ref} {...commonProps}>{children}</h2>;
         case "h3":
-            return <h3 {...elementProps}>{children}</h3>;
+            return <h3 ref={h3Ref} {...commonProps}>{children}</h3>;
         case "a":
-            return <a {...elementProps}>{children}</a>;
+            return <a ref={aRef} {...commonProps}>{children}</a>;
         default:
-            return <div {...elementProps}>{children}</div>;
+            return <div ref={divRef} {...commonProps}>{children}</div>;
     }
 };
 
