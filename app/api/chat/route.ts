@@ -4,19 +4,29 @@ import { generateText } from "ai";
 
 export const maxDuration = 30;
 
+interface ChatMessage {
+    role: string;
+    content: string;
+}
+
+interface RequestBody {
+    messages: ChatMessage[];
+    systemPrompt?: string;
+}
+
 export async function POST(req: Request) {
     try {
-        const { messages, systemPrompt } = await req.json();
+        const { messages, systemPrompt }: RequestBody = await req.json();
 
         // Get the last user message
         const lastUserMessage = messages
-            .filter((msg: any) => msg.role === 'user')
+            .filter((msg: ChatMessage) => msg.role === 'user')
             .pop()?.content;
 
         if (!lastUserMessage) {
-            return new Response(JSON.stringify({ 
-                error: "No user message found" 
-            }), { 
+            return new Response(JSON.stringify({
+                error: "No user message found"
+            }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -28,18 +38,18 @@ export async function POST(req: Request) {
             prompt: lastUserMessage,
         });
 
-        return new Response(JSON.stringify({ 
-            message: text 
+        return new Response(JSON.stringify({
+            message: text
         }), {
             headers: { 'Content-Type': 'application/json' }
         });
-        
+
     } catch (error) {
         console.error("Error in API route:", error);
-        return new Response(JSON.stringify({ 
+        return new Response(JSON.stringify({
             error: "Internal Server Error",
             message: error instanceof Error ? error.message : "Unknown error"
-        }), { 
+        }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
