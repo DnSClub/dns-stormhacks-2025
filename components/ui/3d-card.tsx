@@ -95,8 +95,11 @@ export const CardBody = ({
     );
 };
 
+// Define allowed element types
+type AllowedElements = "div" | "p" | "button" | "span" | "h1" | "h2" | "h3" | "a";
+
 interface CardItemProps {
-    as?: keyof JSX.IntrinsicElements;
+    as?: AllowedElements;
     children: React.ReactNode;
     className?: string;
     translateX?: number | string;
@@ -142,16 +145,24 @@ export const CardItem = ({
         ...rest,
     };
 
-    // Use a switch or if-else to handle different element types
-    if (Tag === "p") {
-        return <p {...elementProps}>{children}</p>;
-    } else if (Tag === "button") {
-        return <button {...elementProps}>{children}</button>;
-    } else if (Tag === "span") {
-        return <span {...elementProps}>{children}</span>;
-    } else {
-        // Default to div
-        return <div {...elementProps}>{children}</div>;
+    // Use a switch to handle different element types
+    switch (Tag) {
+        case "p":
+            return <p {...elementProps}>{children}</p>;
+        case "button":
+            return <button {...elementProps}>{children}</button>;
+        case "span":
+            return <span {...elementProps}>{children}</span>;
+        case "h1":
+            return <h1 {...elementProps}>{children}</h1>;
+        case "h2":
+            return <h2 {...elementProps}>{children}</h2>;
+        case "h3":
+            return <h3 {...elementProps}>{children}</h3>;
+        case "a":
+            return <a {...elementProps}>{children}</a>;
+        default:
+            return <div {...elementProps}>{children}</div>;
     }
 };
 
