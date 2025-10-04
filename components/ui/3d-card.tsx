@@ -1,214 +1,95 @@
 "use client";
-
+import React, { useState } from "react";
+import {
+    motion,
+    AnimatePresence,
+    useScroll,
+    useMotionValueEvent,
+} from "framer-motion";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-import React, {
-    createContext,
-    useState,
-    useContext,
-    useRef,
-    useEffect,
-} from "react";
-
-const MouseEnterContext = createContext<
-    [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
->(undefined);
-
-export const CardContainer = ({
-    children,
-    className,
-    containerClassName,
-}: {
-    children?: React.ReactNode;
-    className?: string;
-    containerClassName?: string;
-}) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [isMouseEntered, setIsMouseEntered] = useState(false);
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        const { left, top, width, height } =
-            containerRef.current.getBoundingClientRect();
-        const x = (e.clientX - left - width / 2) / 25;
-        const y = (e.clientY - top - height / 2) / 25;
-        containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-    };
-
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-        setIsMouseEntered(true);
-        if (!containerRef.current) return;
-    };
-
-    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        setIsMouseEntered(false);
-        containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
-    };
-    return (
-        <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
-            <div
-                className={cn(
-                    "py-20 flex items-center justify-center",
-                    containerClassName
-                )}
-                style={{
-                    perspective: "1000px",
-                }}
-            >
-                <div
-                    ref={containerRef}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseMove={handleMouseMove}
-                    onMouseLeave={handleMouseLeave}
-                    className={cn(
-                        "flex items-center justify-center relative transition-all duration-200 ease-linear",
-                        className
-                    )}
-                    style={{
-                        transformStyle: "preserve-3d",
-                    }}
-                >
-                    {children}
-                </div>
-            </div>
-        </MouseEnterContext.Provider>
-    );
-};
-
-export const CardBody = ({
-    children,
-    className,
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) => {
-    return (
-        <div
-            className={cn(
-                "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
-                className
-            )}
-        >
-            {children}
-        </div>
-    );
-};
-
-// Define allowed element types
-type AllowedElements = "div" | "p" | "button" | "span" | "h1" | "h2" | "h3" | "a";
-
-interface CardItemProps {
-    as?: AllowedElements;
-    children: React.ReactNode;
-    className?: string;
-    translateX?: number | string;
-    translateY?: number | string;
-    translateZ?: number | string;
-    rotateX?: number | string;
-    rotateY?: number | string;
-    rotateZ?: number | string;
+interface NavItem {
+    name: string;
+    link: string;
+    icon?: React.ReactNode;
 }
 
-export const CardItem = ({
-    as: Tag = "div",
-    children,
+interface FloatingNavProps {
+    navItems: NavItem[];
+    className?: string;
+}
+
+export const FloatingNav = ({
+    navItems,
     className,
-    translateX = 0,
-    translateY = 0,
-    translateZ = 0,
-    rotateX = 0,
-    rotateY = 0,
-    rotateZ = 0,
-    ...rest
-}: CardItemProps) => {
-    const [isMouseEntered] = useMouseEnter();
+}: FloatingNavProps) => {
+    const { scrollYProgress } = useScroll();
 
-    // Create separate refs for each element type
-    const divRef = useRef<HTMLDivElement>(null);
-    const pRef = useRef<HTMLParagraphElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const spanRef = useRef<HTMLSpanElement>(null);
-    const h1Ref = useRef<HTMLHeadingElement>(null);
-    const h2Ref = useRef<HTMLHeadingElement>(null);
-    const h3Ref = useRef<HTMLHeadingElement>(null);
-    const aRef = useRef<HTMLAnchorElement>(null);
+    // set true for the initial state so that nav bar is visible in the hero section
+    const [visible, setVisible] = useState(true);
 
-    useEffect(() => {
-        handleAnimations();
-    }, [isMouseEntered]);
+    useMotionValueEvent(scrollYProgress, "change", (current) => {
+        // Check if current is not undefined and is a number
+        if (typeof current === "number") {
+            const direction = current - (scrollYProgress.getPrevious() ?? 0);
 
-    const handleAnimations = () => {
-        let currentRef: HTMLElement | null = null;
-        
-        // Determine which ref to use based on the Tag
-        switch (Tag) {
-            case "p":
-                currentRef = pRef.current;
-                break;
-            case "button":
-                currentRef = buttonRef.current;
-                break;
-            case "span":
-                currentRef = spanRef.current;
-                break;
-            case "h1":
-                currentRef = h1Ref.current;
-                break;
-            case "h2":
-                currentRef = h2Ref.current;
-                break;
-            case "h3":
-                currentRef = h3Ref.current;
-                break;
-            case "a":
-                currentRef = aRef.current;
-                break;
-            default:
-                currentRef = divRef.current;
-                break;
+            if (scrollYProgress.get() < 0.05) {
+                // also set true for the initial state
+                setVisible(true);
+            } else {
+                if (direction < 0) {
+                    setVisible(true);
+                } else {
+                    setVisible(false);
+                }
+            }
         }
+    });
 
-        if (!currentRef) return;
-        
-        if (isMouseEntered) {
-            currentRef.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
-        } else {
-            currentRef.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
-        }
-    };
-
-    const commonProps = {
-        className: cn("w-fit transition duration-200 ease-linear", className),
-        ...rest,
-    };
-
-    // Use a switch to handle different element types with proper refs
-    switch (Tag) {
-        case "p":
-            return <p ref={pRef} {...commonProps}>{children}</p>;
-        case "button":
-            return <button ref={buttonRef} {...commonProps}>{children}</button>;
-        case "span":
-            return <span ref={spanRef} {...commonProps}>{children}</span>;
-        case "h1":
-            return <h1 ref={h1Ref} {...commonProps}>{children}</h1>;
-        case "h2":
-            return <h2 ref={h2Ref} {...commonProps}>{children}</h2>;
-        case "h3":
-            return <h3 ref={h3Ref} {...commonProps}>{children}</h3>;
-        case "a":
-            return <a ref={aRef} {...commonProps}>{children}</a>;
-        default:
-            return <div ref={divRef} {...commonProps}>{children}</div>;
-    }
-};
-
-// Create a hook to use the context
-export const useMouseEnter = () => {
-    const context = useContext(MouseEnterContext);
-    if (context === undefined) {
-        throw new Error("useMouseEnter must be used within a MouseEnterProvider");
-    }
-    return context;
+    return (
+        <AnimatePresence mode="wait">
+            <motion.div
+                initial={{
+                    opacity: 1,
+                    y: -100,
+                }}
+                animate={{
+                    y: visible ? 0 : -100,
+                    opacity: visible ? 1 : 0,
+                }}
+                transition={{
+                    duration: 0.2,
+                }}
+                className={cn(
+                    // change rounded-full to rounded-lg
+                    // remove dark:border-white/[0.2] dark:bg-black bg-white border-transparent
+                    // change  pr-2 pl-8 py-2 to px-10 py-5
+                    "flex max-w-fit md:min-w-[70vw] lg:min-w-fit fixed z-[5000] top-10 inset-x-0 mx-auto px-10 py-5 rounded-lg border border-black/.1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] items-center justify-center space-x-4",
+                    className
+                )}
+                style={{
+                    backdropFilter: "blur(16px) saturate(180%)",
+                    backgroundColor: "rgba(17, 25, 40, 0.75)",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(255, 255, 255, 0.125)",
+                }}
+            >
+                {navItems.map((navItem: NavItem, idx: number) => (
+                    <Link
+                        key={`link=${idx}`}
+                        href={navItem.link}
+                        className={cn(
+                            "relative dark:text-neutral-50 items-center  flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+                        )}
+                    >
+                        <span className="block sm:hidden">{navItem.icon}</span>
+                        {/* add !cursor-pointer */}
+                        {/* remove hidden sm:block for the mobile responsive */}
+                        <span className=" text-sm !cursor-pointer">{navItem.name}</span>
+                    </Link>
+                ))}
+            </motion.div>
+        </AnimatePresence>
+    );
 };
