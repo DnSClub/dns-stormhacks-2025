@@ -1,4 +1,4 @@
-# ⚡ Hack Ready Web Dev Workshop Starter (Next.js)
+# ⚡ Hack Ready Web Dev Workshop
 
 ## 🧰 Prerequisites
 
@@ -62,41 +62,6 @@ npm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🎨 Adding UI Components
-
-We’ll use [shadcn/ui](https://ui.shadcn.com/) to quickly build components.
-
-### 1. Install shadcn/ui
-
-```bash
-npx shadcn-ui@latest init
-```
-
-Follow the prompts (choose Next.js).
-
-### 2. Add a Button Component
-
-```bash
-npx shadcn-ui@latest add button
-```
-
-Example usage in app/page.tsx:
-
-```bash
-import { Button } from "@/components/ui/button"
-
-export default function Home() {
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Hack Ready Workshop</h1>
-      <Button>Click me</Button>
-    </main>
-  )
-}
-```
 
 ---
 
