@@ -1,4 +1,4 @@
-import { FaLocationArrow } from "react-icons/fa6";
+import { FaDiscord } from "react-icons/fa";
 
 import MagicButton from "./MagicButton";
 
@@ -15,18 +15,16 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-col items-center">
-                <h1 className="heading lg:max-w-[45vw]">
-                    Ready to take <span className="text-purple">your</span> digital
-                    presence to the next level?
+                <h1 className="heading lg:max-w-[45vw] text-2xl font-bold">
+                    Go <span className="text-purple-500">Hack!</span>
                 </h1>
                 <p className="text-white-200 md:mt-10 my-5 text-center">
-                    Reach out to me today and let&apos;s discuss how I can help you
-                    achieve your goals.
+                    Join our DNS server to stay updated and connected.
                 </p>
-                <a href="mailto:contact@jsmastery.pro">
+                <a href="https://discord.gg/EzNNJMkcyJ" target="_blank" rel="noopener noreferrer">
                     <MagicButton
-                        title="Let's get in touch"
-                        icon={<FaLocationArrow />}
+                        title="Discord"
+                        icon={<FaDiscord />}
                         position="right"
                     />
                 </a>

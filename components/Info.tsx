@@ -5,7 +5,7 @@ import { CanvasRevealEffect } from "./ui/CanvasRevealEffect";
 
 const Info = () => {
     return (
-        <section className="w-full pt-20">
+        <section className="w-full pt-20 min-h-[100vh] bg-background text-foreground justify-center">
             <h1 className="heading font-bold text-2xl">
                 <span className="text-purple-300">Info</span>
             </h1>

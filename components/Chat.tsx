@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Bot, Loader2, MessageSquare, Send, User } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 interface Message {
     id: string;
@@ -22,15 +22,6 @@ export default function Chat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
 
     const handleSubmit = async (e?: React.FormEvent) => {
         e?.preventDefault();
@@ -106,10 +97,15 @@ export default function Chat() {
         }
     };
 
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        handleSubmit(e);
+    };
+
     return (
-        <div className="min-h-screen bg-background">
+        <div className="bg-background min-h-[100vh] bg-background text-foreground flex items-center justify-center">
             <main className="container mx-auto px-6 py-8 max-w-6xl">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-12rem)]">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Sidebar */}
                     <div className="lg:col-span-1 space-y-6">
                         <Card className="border-0 shadow-medium">
@@ -130,7 +126,7 @@ export default function Chat() {
                                     </span>
                                 </div>
                                 <p className="text-sm">
-                                    Hello! I'm here to help you with any questions or conversations you'd like to have.
+                                    Hello! I'm here to help you lock in so you can get things done.
                                 </p>
                             </CardContent>
                         </Card>
@@ -142,7 +138,7 @@ export default function Chat() {
                             <CardHeader className="border-b">
                                 <CardTitle className="flex items-center gap-2">
                                     <MessageSquare className="h-5 w-5" />
-                                    AI Chat
+                                    Lock In Bot
                                 </CardTitle>
                             </CardHeader>
 
@@ -154,7 +150,7 @@ export default function Chat() {
                                             <div className="text-center">
                                                 <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
                                                 <p className="text-sm">
-                                                    Start a conversation with the AI assistant
+                                                    Start a conversation with the lock in bot by typing a message below.
                                                 </p>
                                             </div>
                                         </div>
@@ -215,19 +211,18 @@ export default function Chat() {
                                                 <div className="flex items-center gap-2">
                                                     <Loader2 className="h-4 w-4 animate-spin" />
                                                     <span className="text-sm text-muted-foreground">
-                                                        Thinking...
+                                                        Locking in...
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
                                     )}
-                                    <div ref={messagesEndRef} />
                                 </div>
                             </CardContent>
 
                             {/* Input Section */}
                             <div className="p-6 border-t">
-                                <form onSubmit={handleSubmit} className="space-y-2">
+                                <form onSubmit={handleFormSubmit} className="space-y-2">
                                     <div className="flex gap-3">
                                         <Input
                                             name="prompt"
@@ -253,7 +248,7 @@ export default function Chat() {
                                         </Button>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        Press Enter to send • AI responses are generated in real-time
+                                        Press Enter to send
                                     </p>
                                 </form>
                             </div>
@@ -263,4 +258,4 @@ export default function Chat() {
             </main>
         </div>
     );
-}
+};

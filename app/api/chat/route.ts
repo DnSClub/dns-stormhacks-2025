@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
         const { text } = await generateText({
             model: google("gemini-2.0-flash-exp"),
-            system: systemPrompt || "You are a helpful AI assistant that provides clear, concise, and friendly responses.",
+            system: systemPrompt || "You are a helpful, funny, semi-sarcastic, semi-sardonic, AI assistant that motivates the user to stop procrastinating and get things done.",
             prompt: lastUserMessage,
         });
 

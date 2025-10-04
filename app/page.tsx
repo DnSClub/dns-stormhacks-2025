@@ -1,11 +1,8 @@
 "use client";
 
-import { navItems } from "@/data";
-
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import Info from "@/components/Info";
-import RecentProjects from "@/components/RecentProjects";
 import { FloatingNav } from "@/components/ui/FloatingNavbar";
 import { ThreeDCardDemo } from "@/components/Card";
 import Chat from "@/components/Chat";
