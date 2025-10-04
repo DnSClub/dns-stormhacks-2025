@@ -63,7 +63,7 @@ export default function Chat() {
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                content: data.message || "I'm here to help!",
+                content: data.message || "I&apos;m here to help!",
                 role: "assistant",
                 createdAt: new Date(),
             };
@@ -126,7 +126,7 @@ export default function Chat() {
                                     </span>
                                 </div>
                                 <p className="text-sm">
-                                    Hello! I'm here to help you lock in so you can get things done.
+                                    Hello! I&apos;m here to help you lock in so you can get things done.
                                 </p>
                             </CardContent>
                         </Card>
@@ -258,4 +258,4 @@ export default function Chat() {
             </main>
         </div>
     );
-};
+}
