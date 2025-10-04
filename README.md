@@ -1,4 +1,4 @@
-# ⚡ Hack Ready Web Dev Workshop
+# ⚡ Hack Ready Web Dev Workshop Demo
 
 ## 🧰 Prerequisites
 
@@ -62,12 +62,3 @@ npm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🚀 Deploying to Vercel
-
-1. Push your code to **GitHub**  
-2. Import the repo into **Vercel**  
-3. Add your environment variables under **Project Settings → Environment Variables**  
-4. Deploy and share your live demo!  
