@@ -8,6 +8,7 @@ import React, {
     useContext,
     useRef,
     useEffect,
+    forwardRef,
 } from "react";
 
 const MouseEnterContext = createContext<
@@ -107,6 +108,25 @@ interface CardItemProps {
     rotateZ?: number | string;
 }
 
+// Create a forwardRef component to handle the dynamic element
+const DynamicElement = forwardRef<HTMLElement, {
+    as: React.ElementType;
+    children: React.ReactNode;
+    className?: string;
+}>(({ as: Tag, children, className, ...rest }, ref) => {
+    return (
+        <Tag
+            ref={ref}
+            className={className}
+            {...rest}
+        >
+            {children}
+        </Tag>
+    );
+});
+
+DynamicElement.displayName = "DynamicElement";
+
 export const CardItem = ({
     as: Tag = "div",
     children,
@@ -136,13 +156,14 @@ export const CardItem = ({
     };
 
     return (
-        <Tag
+        <DynamicElement
+            as={Tag}
             ref={ref}
             className={cn("w-fit transition duration-200 ease-linear", className)}
             {...rest}
         >
             {children}
-        </Tag>
+        </DynamicElement>
     );
 };
 
