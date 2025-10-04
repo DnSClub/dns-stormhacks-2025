@@ -10,8 +10,6 @@ Please install and set up before the workshop:
 - A [Vercel account](https://vercel.com/) (connected to GitHub)
 - A **Google AI API Key** from [Google AI Studio](https://aistudio.google.com/app/apikey)
 
-*(Optional if you want to explore after the workshop: a [Firebase account](https://firebase.google.com/))*
-
 ---
 
 ## 🛠️ Setup Instructions
@@ -37,13 +35,23 @@ npm install
 
 ## 🔐 Environment Variables
 
-Create a .env.local file in the root of your project and add:
+Create a file called `.env.local` in the root of your project.
+
+Copy the contents from `.env.dev` into `.env.local` using:
 
 ```bash
-NEXT_PUBLIC_GEN_AI_KEY=your_google_ai_api_key
+cp .env.dev .env.local
 ```
 
-Your Gemini API key can be generated at: [Google AI Studio](https://google.com/)
+Open `.env.local` and replace the placeholder values with your actual keys:
+
+```env
+GOOGLE_GENERATIVE_AI_API_KEY=your-google-api-key-here
+```
+
+**Note:** Your Google API key can be generated at: [Google AI Studio](https://aistudio.google.com/)
+
+**Important:** All environment variables must start with `NEXT_PUBLIC_` for Next.js to expose them to the frontend.
 
 ## ▶️ Run the Development Server
 
