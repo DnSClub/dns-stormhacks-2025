@@ -60,25 +60,31 @@ export default function Chat() {
             });
 
             if (!response.ok) {
-                throw new Error("Failed to send message");
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Failed to send message: ${response.status}`);
             }
 
             const data = await response.json();
 
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                content: data.message || data.content || "I'm here to help!",
+                content: data.message || "I'm here to help!",
                 role: "assistant",
                 createdAt: new Date(),
             };
 
             setMessages(prev => [...prev, assistantMessage]);
+
         } catch (error) {
             console.error("Error sending message:", error);
 
             const errorMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                content: "Sorry, I encountered an error. Please try again.",
+                content: error instanceof Error ? error.message : "Sorry, I encountered an error. Please try again.",
                 role: "assistant",
                 createdAt: new Date(),
             };
