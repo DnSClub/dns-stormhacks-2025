@@ -9,6 +9,7 @@ import React, {
     useRef,
     useEffect,
     forwardRef,
+    ElementType,
 } from "react";
 
 const MouseEnterContext = createContext<
@@ -97,7 +98,7 @@ export const CardBody = ({
 };
 
 interface CardItemProps {
-    as?: React.ElementType;
+    as?: ElementType;
     children: React.ReactNode;
     className?: string;
     translateX?: number | string;
@@ -110,7 +111,7 @@ interface CardItemProps {
 
 // Create a forwardRef component to handle the dynamic element
 const DynamicElement = forwardRef<HTMLElement, {
-    as: React.ElementType;
+    as: ElementType;
     children: React.ReactNode;
     className?: string;
     [key: string]: unknown;
