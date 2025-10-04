@@ -1,56 +1,35 @@
-"use client";
+import { FaLocationArrow } from "react-icons/fa6";
+import MagicButton from "./MagicButton";
 
-export default function Hero() {
+const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-hero">
-      <div className="container mx-auto px-6 py-24 md:py-32">
-        <div className="flex flex-col items-center text-center space-y-8">
-          {/* Badge */}
-          <div className="inline-flex items-center rounded-full border bg-card px-4 py-2 text-sm shadow-subtle">
-            <div className="mr-2 h-4 w-4 text-primary" />
-            <span className="text-muted-foreground">
-              AI-Powered Interview Preparation
-            </span>
-          </div>
+    <div className="pb-10 pt-36 bg-background text-foreground">
+      <div className="flex justify-center relative my-20 z-10">
+        <div className="max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center justify-center">
+          
+          <p className="uppercase tracking-widest text-xs text-center text-blue-100 max-w-80">
+            A DNS X StormHacks Collaboration
+          </p>
 
-          {/* Headline */}
-          <div className="space-y-4 max-w-4xl">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              Ace Your Next
-              <span className="bg-primary bg-clip-text text-transparent">
-                {" "}
-                Interview
-              </span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Upload your resume, paste job descriptions, and get personalized
-              AI-generated interview questions to help you prepare and succeed.
-            </p>
-          </div>
+          <h1 className="text-center text-[40px] md:text-5xl lg:text-6xl font-bold leading-tight mt-4 mb-6 md:mb-8 text-purple-200">
+            Hack Ready Web Dev Website
+          </h1>
 
-          {/* Feature highlights */}
-          <div className="flex flex-wrap justify-center gap-8 mt-16 text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 text-primary" />
-              <span>Tailored Questions</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 text-primary" />
-              <span>AI-Powered</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 text-primary" />
-              <span>Smart Analytics</span>
-            </div>
-          </div>
+          <h2 className="text-center md:tracking-wider text-sm md:text-lg lg:text-2xl text-white">
+            AI Procrastination Motivation Chatbot
+          </h2>
+
+          <a href="#card">
+            <MagicButton
+              title="A Button"
+              icon={<FaLocationArrow />}
+              position="right"
+            />
+          </a>
         </div>
       </div>
-
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/5 blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-primary/3 blur-3xl"></div>
-      </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default Hero;
