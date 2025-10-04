@@ -127,8 +127,8 @@ const DynamicElement = forwardRef<HTMLElement, {
 
 DynamicElement.displayName = "DynamicElement";
 
+// Alternative simpler version - remove the 'as' prop and always use div
 export const CardItem = ({
-    as: Tag = "div",
     children,
     className,
     translateX = 0,
@@ -138,8 +138,8 @@ export const CardItem = ({
     rotateY = 0,
     rotateZ = 0,
     ...rest
-}: CardItemProps) => {
-    const ref = useRef<HTMLElement>(null);
+}: Omit<CardItemProps, 'as'>) => {
+    const ref = useRef<HTMLDivElement>(null);
     const [isMouseEntered] = useMouseEnter();
 
     useEffect(() => {
@@ -156,14 +156,13 @@ export const CardItem = ({
     };
 
     return (
-        <DynamicElement
-            as={Tag}
+        <div
             ref={ref}
             className={cn("w-fit transition duration-200 ease-linear", className)}
             {...rest}
         >
             {children}
-        </DynamicElement>
+        </div>
     );
 };
 
